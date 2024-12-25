@@ -228,11 +228,7 @@
             document.getElementById('loading-overlay').style.display = 'none'; // إخفاء صفحة التحميل بعد 2 ثانية
         }, 2000); // تأخير لمدة 2 ثانية (2000 ملي ثانية)
 
-        // الكشف عن الجهاز
-        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        if (isMobile) {
-            window.location.href = "mobile.html"; // استبدل "mobile.html" بعنوان الصفحة التي ترغب في الانتقال إليها
-        }
+      
     };
 
         // تهيئة الخريطة مع إحداثيات الموقع المحدد
