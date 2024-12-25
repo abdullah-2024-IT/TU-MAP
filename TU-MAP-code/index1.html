@@ -50,7 +50,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* باقي تصميم الصفحة */
+        /* تصميم الصفحة */
         body, html {
             margin: 0;
             padding: 0;
@@ -62,6 +62,8 @@
             background-color: #1e1e1e;
             color: #fff;
         }
+
+        /* الشريط العلوي */
         .topbar {
             position: fixed;
             top: 10px;
@@ -75,7 +77,7 @@
             justify-content: space-between;
             padding: 10px 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px; /* جعل حواف مستطيلة */
+            border-radius: 10px; /* جعل الحواف مستطيلة */
             z-index: 1001;
             transition: background-color 0.3s, color 0.3s;
         }
@@ -103,6 +105,8 @@
         body.dark-mode .topbar-buttons button:hover {
             color: #fff;
         }
+
+        /* المستطيلات الجانبية */
         .section-boxes {
             position: fixed;
             top: 50%;
