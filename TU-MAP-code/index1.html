@@ -85,6 +85,19 @@
             background-color: #333;
             color: #fff;
         }
+
+        .topbar-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start; /* ضبط الأزرار في اليسار */
+        }
+
+        .search-container {
+            width: 100%;
+            display: flex;
+            justify-content: center; /* جعل مربع البحث في المنتصف */
+        }
+
         .search-container input {
             width: 100%;
             padding: 10px;
@@ -92,17 +105,13 @@
             border-radius: 5px; /* جعل الحواف مستطيلة */
             outline: none;
         }
-        .topbar-buttons button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            color: #555;
-        }
-        body.dark-mode .topbar-buttons button {
+
+        body.dark-mode .topbar-buttons span {
             color: #ddd;
+            cursor: pointer; /* إضافة مؤشر التفاعل */
         }
-        body.dark-mode .topbar-buttons button:hover {
+
+        body.dark-mode .topbar-buttons span:hover {
             color: #fff;
         }
 
@@ -111,10 +120,10 @@
             position: fixed;
             top: 50%;
             left: 20px;
-            transform: translateY(-50%);
+            transform: translateY(-20%);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 5px;
             z-index: 1000;
         }
         .section-box {
@@ -159,14 +168,14 @@
         }
 
         /* تحسين التصميم للجوال */
-        @media (max-width: 768px) {
+        @media (max-width: 30px) {
             .topbar {
-                width: 95%;
+                width: 100%;
                 flex-direction: column;
                 align-items: flex-start;
             }
             .search-container {
-                margin-top: 10px;
+                margin-top: 5px;
             }
             .section-box {
                 width: 150px;
@@ -198,14 +207,14 @@
 
     <!-- الشريط العلوي -->
     <div class="topbar">
-        <img src="images/شعار_جامعة_الطائف_السعودية.png" alt="شعار" height="40">
+        <div class="topbar-buttons">
+            <span id="language-btn" style="cursor: pointer;">عربي</span> <!-- جعل النص قابل للنقر -->
+            <span id="theme-btn" style="cursor: pointer;">☀️</span> <!-- جعل الإيموجي قابل للنقر -->
+        </div>
         <div class="search-container">
             <input type="text" id="search-input" placeholder="ابحث هنا..." data-en="Search here..." data-ar="ابحث هنا...">
         </div>
-        <div class="topbar-buttons">
-            <button id="language-btn">عربي</button>
-            <button id="theme-btn">☀️</button>
-        </div>
+        <img src="images/شعار_جامعة_الطائف_السعودية.png" alt="شعار" height="40">
     </div>
 
     <!-- المستطيلات الشفافة للأقسام -->
