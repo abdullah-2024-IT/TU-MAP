@@ -222,24 +222,22 @@
     <!-- مكتبة Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-       window.onload = function() {
-        // عرض صفحة التحميل لمدة 2 ثانية على الأقل
-        setTimeout(() => {
-            document.getElementById('loading-overlay').style.display = 'none'; // إخفاء صفحة التحميل بعد 2 ثانية
-        }, 2000); // تأخير لمدة 2 ثانية (2000 ملي ثانية)
-
-      
-    };
+        // تأجيل عرض صفحة التحميل فقط بعد تحميل الصفحة بالكامل
+        window.addEventListener("load", function() {
+            setTimeout(() => {
+                document.getElementById('loading-overlay').style.display = 'none'; // إخفاء صفحة التحميل بعد 2 ثانية
+            }, 2000); // تأخير لمدة 2 ثانية (2000 ملي ثانية)
+        });
 
         // تهيئة الخريطة مع إحداثيات الموقع المحدد
-        const map = L.map('map').setView([21.4328, 40.4935], 17); // إحداثيات الموقع مع مستوى تكبير 25
+        const map = L.map('map').setView([21.4328, 40.4935], 17); // إحداثيات الموقع مع مستوى تكبير 17
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
         // إضافة علامة للموقع
         const marker = L.marker([21.4328, 40.4935]).addTo(map)
-            .bindPopup('جامعه الطائف - طلاب')
+            .bindPopup('جامعة الطائف - طلاب')
             .openPopup();
 
         // تبديل اللغة
