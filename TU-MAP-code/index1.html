@@ -192,30 +192,6 @@
             z-index: 0;
         }
 
-        /* تصميم الفوتر للجوال */
-        .footer-boxes {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* الوضع الداكن */
-            color: #fff;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            z-index: 1000;
-        }
-
-        body:not(.dark-mode) .footer-boxes {
-            background-color: rgba(255, 255, 255, 0.9); /* الوضع الفاتح */
-            color: #000;
-        }
-
-        .footer-box {
-            text-align: center;
-            cursor: pointer;
-            font-size: 14px;
-        }
     </style>
 </head>
 <body>
@@ -242,19 +218,11 @@
     </div>
 
     <!-- المستطيلات الشفافة للأقسام -->
-    <div class="section-boxes" id="section-boxes">
+    <div class="section-boxes">
         <div class="section-box" data-en="Explore" data-ar="استكشاف">استكشاف</div>
         <div class="section-box" data-en="My Places" data-ar="أماكني">أماكني</div>
         <div class="section-box" data-en="Directions" data-ar="الاتجاهات">الاتجاهات</div>
         <div class="section-box" data-en="Events" data-ar="الأحداث">الأحداث</div>
-    </div>
-
-    <!-- الفوتر للجوال -->
-    <div class="footer-boxes" id="footer-boxes">
-        <div class="footer-box" data-en="Explore" data-ar="استكشاف">استكشاف</div>
-        <div class="footer-box" data-en="My Places" data-ar="أماكني">أماكني</div>
-        <div class="footer-box" data-en="Directions" data-ar="الاتجاهات">الاتجاهات</div>
-        <div class="footer-box" data-en="Events" data-ar="الأحداث">الأحداث</div>
     </div>
 
     <!-- الخريطة -->
@@ -268,6 +236,12 @@
         setTimeout(() => {
             document.getElementById('loading-overlay').style.display = 'none'; // إخفاء صفحة التحميل بعد 2 ثانية
         }, 2000); // تأخير لمدة 2 ثانية (2000 ملي ثانية)
+
+        // الكشف عن الجهاز
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile) {
+            window.location.href = "mobile.html"; // استبدل "mobile.html" بعنوان الصفحة التي ترغب في الانتقال إليها
+        }
     };
 
         // تهيئة الخريطة مع إحداثيات الموقع المحدد
@@ -284,7 +258,6 @@
         // تبديل اللغة
         const languageBtn = document.getElementById("language-btn");
         const sectionBoxes = document.querySelectorAll(".section-box");
-        const footerBoxes = document.querySelectorAll(".footer-box");
         const searchInput = document.getElementById("search-input");
 
         languageBtn.addEventListener("click", () => {
@@ -294,17 +267,11 @@
                 sectionBoxes.forEach(box => {
                     box.textContent = box.getAttribute("data-en");
                 });
-                footerBoxes.forEach(box => {
-                    box.textContent = box.getAttribute("data-en");
-                });
                 searchInput.placeholder = searchInput.getAttribute("data-en");
             } else {
                 languageBtn.textContent = "عربي";
                 document.documentElement.lang = "ar";
                 sectionBoxes.forEach(box => {
-                    box.textContent = box.getAttribute("data-ar");
-                });
-                footerBoxes.forEach(box => {
                     box.textContent = box.getAttribute("data-ar");
                 });
                 searchInput.placeholder = searchInput.getAttribute("data-ar");
@@ -334,19 +301,6 @@
                 box.style.transform = "scale(1)";  // إعادة الحجم الطبيعي بعد اللمس
             });
         });
-
-        // كشف نوع الجهاز وتحديث التصميم
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        const sectionBoxesContainer = document.getElementById("section-boxes");
-        const footerBoxesContainer = document.getElementById("footer-boxes");
-
-        if (isMobile) {
-            sectionBoxesContainer.style.display = "none";
-            footerBoxesContainer.style.display = "flex";
-        } else {
-            sectionBoxesContainer.style.display = "flex";
-            footerBoxesContainer.style.display = "none";
-        }
     </script>
 </body>
 </html>
