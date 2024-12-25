@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خريطة مع صفحة جاري التحميل</title>
+    <!-- إضافة مكتبة Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* تصميم صفحة جاري التحميل */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .loading-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px; /* جعل الحواف مستطيلة */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .loading-card img {
+            width: 100px; /* تغيير حجم الصورة حسب الحاجة */
+            height: 100px;
+            margin-bottom: 20px;
+        }
+        
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* باقي تصميم الصفحة */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* تغيير الخط إلى خط مريح */
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background-color: #1e1e1e;
+            color: #fff;
+        }
+        .topbar {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px; /* جعل حواف مستطيلة */
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark-mode .topbar {
+            background-color: #333;
+            color: #fff;
+        }
+        .search-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px; /* جعل الحواف مستطيلة */
+            outline: none;
+        }
+        .topbar-buttons button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+        }
+        body.dark-mode .topbar-buttons button {
+            color: #ddd;
+        }
+        body.dark-mode .topbar-buttons button:hover {
+            color: #fff;
+        }
+        .section-boxes {
+            position: fixed;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .section-box {
+            background-color: rgba(0, 0, 0, 0.6); /* الوضع الداكن */
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px; /* جعل الحواف مستطيلة */
+            width: 200px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, border 0.3s;
+            border: 2px solid transparent; /* حواف غير مرئية افتراضيًا */
+        }
+
+        body.dark-mode .section-box {
+            background-color: rgba(0, 0, 0, 0.6); /* الوضع الداكن */
+            border-color: #fff; /* حواف بيضاء في الوضع الداكن */
+        }
+
+        body:not(.dark-mode) .section-box {
+            background-color: rgba(255, 255, 255, 0.6); /* الوضع الفاتح */
+            color: #000; /* النص باللون الأسود في الوضع الفاتح */
+            border-color: #000; /* حواف سوداء في الوضع الفاتح */
+        }
+
+        .section-box:hover, .section-box:active {
+            background-color: rgba(0, 0, 0, 0.8); /* لون أغمق عند التمرير أو اللمس */
+            transform: scale(1.05); /* تكبير بسيط عند التفاعل */
+            border-color: #ff6f00; /* تغيير لون الحافة عند التفاعل */
+        }
+
+        /* تحسين التصميم للأجهزة الكبيرة */
+        @media (min-width: 1024px) {
+            .topbar {
+                width: 70%;
+            }
+            .section-box {
+                width: 200px;
+                font-size: 16px;
+            }
+        }
+
+        /* تحسين التصميم للجوال */
+        @media (max-width: 768px) {
+            .topbar {
+                width: 95%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .search-container {
+                margin-top: 10px;
+            }
+            .section-box {
+                width: 150px;
+                font-size: 12px;
+            }
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- صفحة جاري التحميل -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-card">
+            <!-- اختر الصورة الخاصة بك -->
+            <img src="images/logo-verify.png" alt="صورة تحميل" />
+            <div class="loader"></div>
+            <p>جاري التحميل...</p>
+        </div>
+    </div>
+
+    <!-- الشريط العلوي -->
+    <div class="topbar">
+        <img src="images/شعار_جامعة_الطائف_السعودية.png" alt="شعار" height="40">
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="ابحث هنا..." data-en="Search here..." data-ar="ابحث هنا...">
+        </div>
+        <div class="topbar-buttons">
+            <button id="language-btn">عربي</button>
+            <button id="theme-btn">☀️</button>
+        </div>
+    </div>
+
+    <!-- المستطيلات الشفافة للأقسام -->
+    <div class="section-boxes">
+        <div class="section-box" data-en="Explore" data-ar="استكشاف">استكشاف</div>
+        <div class="section-box" data-en="My Places" data-ar="أماكني">أماكني</div>
+        <div class="section-box" data-en="Directions" data-ar="الاتجاهات">الاتجاهات</div>
+        <div class="section-box" data-en="Events" data-ar="الأحداث">الأحداث</div>
+    </div>
+
+    <!-- الخريطة -->
+    <div id="map"></div>
+
+    <!-- مكتبة Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+       window.onload = function() {
+        // عرض صفحة التحميل لمدة 2 ثانية على الأقل
+        setTimeout(() => {
+            document.getElementById('loading-overlay').style.display = 'none'; // إخفاء صفحة التحميل بعد 2 ثانية
+        }, 2000); // تأخير لمدة 2 ثانية (2000 ملي ثانية)
+    };
+
+        // تهيئة الخريطة مع إحداثيات الموقع المحدد
+        const map = L.map('map').setView([21.4328, 40.4935], 17); // إحداثيات الموقع مع مستوى تكبير 25
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // إضافة علامة للموقع
+        const marker = L.marker([21.4328, 40.4935]).addTo(map)
+            .bindPopup('جامعه الطائف - طلاب')
+            .openPopup();
+
+        // تبديل اللغة
+        const languageBtn = document.getElementById("language-btn");
+        const sectionBoxes = document.querySelectorAll(".section-box");
+        const searchInput = document.getElementById("search-input");
+
+        languageBtn.addEventListener("click", () => {
+            if (languageBtn.textContent === "عربي") {
+                languageBtn.textContent = "English";
+                document.documentElement.lang = "en";
+                sectionBoxes.forEach(box => {
+                    box.textContent = box.getAttribute("data-en");
+                });
+                searchInput.placeholder = searchInput.getAttribute("data-en");
+            } else {
+                languageBtn.textContent = "عربي";
+                document.documentElement.lang = "ar";
+                sectionBoxes.forEach(box => {
+                    box.textContent = box.getAttribute("data-ar");
+                });
+                searchInput.placeholder = searchInput.getAttribute("data-ar");
+            }
+        });
+
+        // تبديل وضع الإضاءة
+        const themeBtn = document.getElementById("theme-btn");
+        const body = document.body;
+
+        themeBtn.addEventListener("click", () => {
+            body.classList.toggle("dark-mode");
+            if (body.classList.contains("dark-mode")) {
+                themeBtn.textContent = "🌙";
+            } else {
+                themeBtn.textContent = "☀️";
+            }
+        });
+
+        // إضافة أحداث التفاعل عند اللمس
+        sectionBoxes.forEach(box => {
+            box.addEventListener("touchstart", () => {
+                box.style.transform = "scale(1.05)";  // تكبير عند اللمس
+            });
+
+            box.addEventListener("touchend", () => {
+                box.style.transform = "scale(1)";  // إعادة الحجم الطبيعي بعد اللمس
+            });
+        });
+    </script>
+</body>
+</html>
