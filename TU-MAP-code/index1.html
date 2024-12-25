@@ -205,8 +205,8 @@
         </div>
     </div>
 
-    <!-- الشريط العلوي -->
-    <div class="topbar">
+     <!-- الشريط العلوي -->
+     <div class="topbar">
         <div class="topbar-buttons">
             <span id="language-btn" style="cursor: pointer;">عربي</span> <!-- جعل النص قابل للنقر -->
             <span id="theme-btn" style="cursor: pointer;">☀️</span> <!-- جعل الإيموجي قابل للنقر -->
@@ -231,28 +231,29 @@
     <!-- مكتبة Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-       window.onload = function() {
-        // عرض صفحة التحميل لمدة 2 ثانية على الأقل
-        setTimeout(() => {
-            document.getElementById('loading-overlay').style.display = 'none'; // إخفاء صفحة التحميل بعد 2 ثانية
-        }, 2000); // تأخير لمدة 2 ثانية (2000 ملي ثانية)
+        window.onload = function() {
+            // عرض صفحة التحميل لمدة 2 ثانية على الأقل
+            setTimeout(() => {
+                document.getElementById('loading-overlay').style.display = 'none'; // إخفاء صفحة التحميل بعد 2 ثانية
+                document.getElementById('topbar').style.display = 'block'; // عرض الشريط العلوي بعد التحميل
+            }, 2000); // تأخير لمدة 2 ثانية (2000 ملي ثانية)
 
-        // الكشف عن الجهاز
-        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        if (isMobile) {
-            window.location.href = "mobile.html"; // استبدل "mobile.html" بعنوان الصفحة التي ترغب في الانتقال إليها
-        }
-    };
+            // الكشف عن الجهاز
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            if (isMobile) {
+                window.location.href = "mobile.html"; // استبدل "mobile.html" بعنوان الصفحة التي ترغب في الانتقال إليها
+            }
+        };
 
         // تهيئة الخريطة مع إحداثيات الموقع المحدد
-        const map = L.map('map').setView([21.4328, 40.4935], 17); // إحداثيات الموقع مع مستوى تكبير 25
+        const map = L.map('map').setView([21.4328, 40.4935], 17); // إحداثيات الموقع مع مستوى تكبير 17
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
         // إضافة علامة للموقع
         const marker = L.marker([21.4328, 40.4935]).addTo(map)
-            .bindPopup('جامعه الطائف - طلاب')
+            .bindPopup('جامعة الطائف - طلاب')
             .openPopup();
 
         // تبديل اللغة
